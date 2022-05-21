@@ -23,9 +23,9 @@ private HttpSession session;
 
 
     public List hent(HttpServletResponse response) throws IOException{ //Hent brukere med betingelse om at man er innlogget
-        String sql= "Select * from Persontabell";
+        String sql= "Select * from Persontabell"; //SQL
 
-        if(session.getAttribute("Innlogget")!= null){
+        if(session.getAttribute("Innlogget")!= null){ //Sjekker om Session-attributten er satt. Om den = null, sendes ingenting tilbake
             try {
                 List<User> liste = db.query(sql, new BeanPropertyRowMapper<>(User.class)); //Hent liste over brukere dersom man er logget inn
                 return liste;
@@ -36,7 +36,7 @@ private HttpSession session;
                 return null;
             }
             }
-        else return null;
+        else return null; // Ikke innlogget, returnerer ingenting
     }
 
 
@@ -62,7 +62,7 @@ private HttpSession session;
             return false;
         }
     }
-    private String krypterpassord(String passord){
+    private String krypterpassord(String passord){ // Returnerer kryptert passord
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(11);
         return bcrypt.encode(passord);
     }
@@ -98,7 +98,7 @@ private HttpSession session;
         }
         catch(Exception e){
             logger.error("Fant ikke bruker");
-            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fant ikke bruker");
+            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fant ikke bruker"); //Sender tilbake feilmelding
         }
 
         if(suksess){
@@ -108,10 +108,8 @@ private HttpSession session;
         else return false; //returnerer false
     }
 
-
     public boolean decrypt(String passord, String hashpassord){
         BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
         return BCrypt.matches(passord,hashpassord);
     }
-
 }
